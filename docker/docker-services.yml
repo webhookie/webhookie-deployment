@@ -1,0 +1,305 @@
+version: '3.9'
+
+networks:
+  webhookie:
+
+x-services-volume:
+  &services-volume
+  type: bind
+  source: ./data
+  target: /var/app/data
+
+x-service-labels:
+  &default-labels
+  collect_logs_with_filebeat: "true"
+  decode_log_event_to_json_object: "true"
+
+x-services-small-env:
+  &services-small-env
+  JAVA_TOOL_OPTIONS: "-Xms${SMALL_MS_MEM}M -Xmx${SMALL_MX_MEM}M"
+
+x-services-small:
+  &services-small
+  limits:
+    cpus: "${SMALL_CPU_LIMIT}"
+    memory: "${SMALL_MX_MEM}M"
+  reservations:
+    cpus: "${SMALL_CPU_RES}"
+    memory: "${SMALL_MS_MEM}M"
+
+x-services-medium-env:
+  &services-medium-env
+  JAVA_TOOL_OPTIONS: "-Xms${MEDIUM_MS_MEM}M -Xmx${MEDIUM_MX_MEM}M"
+
+x-services-medium:
+  &services-medium
+  limits:
+    cpus: "${MEDIUM_CPU_LIMIT}"
+    memory: "${MEDIUM_MX_MEM}M"
+  reservations:
+    cpus: "${MEDIUM_CPU_RES}"
+    memory: "${MEDIUM_MS_MEM}M"
+
+x-services-large-env:
+  &services-large-env
+  JAVA_TOOL_OPTIONS: "-Xms${LARGE_MS_MEM}M -Xmx${LARGE_MX_MEM}M"
+
+x-services-large:
+  &services-large
+  limits:
+    cpus: "${LARGE_CPU_LIMIT}"
+    memory: "${LARGE_MX_MEM}M"
+  reservations:
+    cpus: "${LARGE_CPU_RES}"
+    memory: "${LARGE_MS_MEM}M"
+
+services:
+  admin-service:
+    container_name: admin-service
+    image: hookiesolutions/webhookie-admin-service:${WEBHOOKIE_TAG}
+    volumes:
+      - *services-volume
+    ports:
+      - "8081:8081"
+    networks:
+      webhookie:
+    depends_on:
+      - webhookie-mongo
+      - webhookie-amqp
+      - registry-service
+    deploy:
+      resources: 
+        *services-small
+    env_file:
+      - ${AUTH_ENV}
+    environment:
+      <<: *services-small-env
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_CONFIG_IMPORT: "file:./var/app/data/auth.yml"
+    labels:
+      <<: *default-labels
+  api-ingress:
+    container_name: api-ingress
+    image: hookiesolutions/webhookie-api-ingress:${WEBHOOKIE_TAG}
+    volumes:
+      - *services-volume
+    ports:
+      - "8083:8083"
+    networks:
+      webhookie:
+    depends_on:
+      - webhookie-amqp
+      - registry-service
+    deploy:
+      resources:
+        *services-small
+    env_file:
+      - ${AUTH_ENV}
+    environment:
+      <<: *services-small-env
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_CONFIG_IMPORT: "file:./var/app/data/auth.yml"
+    labels:
+      <<: *default-labels
+  hmac-signer:
+    container_name: hmac-signer
+    image: hookiesolutions/webhookie-hmac-signer:${WEBHOOKIE_TAG}
+    volumes:
+      - *services-volume
+    ports:
+      - "8091:8091"
+    networks:
+      webhookie:
+    depends_on:
+      - webhookie-amqp
+      - registry-service
+    deploy:
+      resources:
+        *services-small
+    env_file:
+      - ${AUTH_ENV}
+    environment:
+      <<: *services-small-env
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_CONFIG_IMPORT: "file:./var/app/data/auth.yml"
+      WH_CRYPTO_KEY: "+DNRYPp8oQNF17acH09qV3PTBNB8CikBafu+RgcknUU="
+    labels:
+      <<: *default-labels
+  oauth2-signer:
+    container_name: oauth2-signer
+    image: hookiesolutions/webhookie-oauth2-signer:${WEBHOOKIE_TAG}
+    volumes:
+      - *services-volume
+    ports:
+      - "8090:8090"
+    networks:
+      webhookie:
+    depends_on:
+      - webhookie-amqp
+      - registry-service
+    deploy:
+      resources:
+        *services-small
+    env_file:
+      - ${AUTH_ENV}
+    environment:
+      <<: *services-small-env
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_CONFIG_IMPORT: "file:./var/app/data/auth.yml"
+      WH_CRYPTO_KEY: "+DNRYPp8oQNF17acH09qV3PTBNB8CikBafu+RgcknUU="
+    labels:
+      <<: *default-labels
+  http-publisher:
+    container_name: http-publisher
+    image: hookiesolutions/webhookie-http-publisher-service:${WEBHOOKIE_TAG}
+    volumes:
+      - *services-volume
+    ports:
+      - "8084:8084"
+    networks:
+      webhookie:
+    depends_on:
+      - webhookie-amqp
+      - registry-service
+    deploy:
+      resources:
+        *services-medium
+    env_file:
+      - ${AUTH_ENV}
+    environment:
+      <<: *services-medium-env
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_CONFIG_IMPORT: "file:./var/app/data/auth.yml"
+      WH_CRYPTO_KEY: "+DNRYPp8oQNF17acH09qV3PTBNB8CikBafu+RgcknUU="
+    labels:
+      <<: *default-labels
+  profile-service:
+    container_name: profile-service
+    image: hookiesolutions/webhookie-profile-service:${WEBHOOKIE_TAG}
+    volumes:
+      - *services-volume
+    ports:
+      - "8085:8085"
+    networks:
+      webhookie:
+    depends_on:
+      - registry-service
+    deploy:
+      resources:
+        *services-small
+    env_file:
+      - ${AUTH_ENV}
+    environment:
+      <<: *services-small-env
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_CONFIG_IMPORT: "file:./var/app/data/auth.yml"
+    labels:
+      <<: *default-labels
+  subscription-service:
+    container_name: subscription-service
+    image: hookiesolutions/webhookie-subscription-service:${WEBHOOKIE_TAG}
+    volumes:
+      - *services-volume
+    ports:
+    - "8086:8086"
+    networks:
+      webhookie:
+    depends_on:
+      - webhookie-mongo
+      - webhookie-amqp
+      - registry-service
+    deploy:
+      resources:
+        *services-large
+    env_file:
+      - ${AUTH_ENV}
+    environment:
+      <<: *services-large-env
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_CONFIG_IMPORT: "file:./var/app/data/auth.yml"
+      WH_CRYPTO_KEY: "+DNRYPp8oQNF17acH09qV3PTBNB8CikBafu+RgcknUU="
+    labels:
+      <<: *default-labels
+  transformation-service:
+    container_name: transformation-service
+    image: hookiesolutions/webhookie-transformation-service:${WEBHOOKIE_TAG}
+    volumes:
+      - *services-volume
+    ports:
+      - "8089:8089"
+    networks:
+      webhookie:
+    depends_on:
+      - webhookie-amqp
+      - registry-service
+    deploy:
+      resources:
+        *services-medium
+    env_file:
+      - ${AUTH_ENV}
+    environment:
+      <<: *services-medium-env
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_CONFIG_IMPORT: "file:./var/app/data/auth.yml"
+      WH_CRYPTO_KEY: "+DNRYPp8oQNF17acH09qV3PTBNB8CikBafu+RgcknUU="
+    labels:
+      <<: *default-labels
+  traffic-service:
+    container_name: traffic-service
+    image: hookiesolutions/webhookie-traffic-service:${WEBHOOKIE_TAG}
+    volumes:
+      - *services-volume
+    ports:
+      - "8087:8087"
+    networks:
+      webhookie:
+    depends_on:
+      - webhookie-mongo
+      - webhookie-amqp
+      - registry-service
+    deploy:
+      resources:
+        *services-large
+    env_file:
+      - ${AUTH_ENV}
+    environment:
+      <<: *services-large-env
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_CONFIG_IMPORT: "file:./var/app/data/auth.yml"
+      WH_CRYPTO_KEY: "+DNRYPp8oQNF17acH09qV3PTBNB8CikBafu+RgcknUU="
+    labels:
+      <<: *default-labels
+  webhookapi-repo:
+    container_name: webhookapi-repo
+    image: hookiesolutions/webhookie-webhookapi-repo:${WEBHOOKIE_TAG}
+    volumes:
+      - *services-volume
+    ports:
+      - "8088:8088"
+    networks:
+      webhookie:
+    depends_on:
+      - webhookie-mongo
+      - webhookie-amqp
+      - registry-service
+    deploy:
+      resources:
+        *services-small
+    env_file:
+      - ${AUTH_ENV}
+    environment:
+      <<: *services-small-env
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_CONFIG_IMPORT: "file:./var/app/data/auth.yml"
+    labels:
+      <<: *default-labels
+  asyncapi-parser:
+    container_name: asyncapi-parser
+    image: hookiesolutions/webhookie-asyncapi-service:${WEBHOOKIE_TAG}
+    ports:
+      - "3000:3000"
+    networks:
+      webhookie:
+    deploy:
+      resources:
+        *services-small

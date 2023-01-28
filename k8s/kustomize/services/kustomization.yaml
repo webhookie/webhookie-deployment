@@ -1,0 +1,47 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+configMapGenerator:
+- name: auth-yml
+  files:
+  - data/auth.yml
+  options:
+    disableNameSuffixHash: true
+secretGenerator:
+- name: auth-env
+  envs:
+  - ./data/auth.env
+  options:
+    disableNameSuffixHash: true
+- name: rabbitmq-env
+  envs:
+  - ./data/rabbitmq.env
+  options:
+    disableNameSuffixHash: true
+- name: k8s-env
+  envs:
+  - ./data/k8s.env
+  options:
+    disableNameSuffixHash: true
+- name: crypto-key-env
+  envs:
+  - ./data/crypto.env
+  options:
+    disableNameSuffixHash: true
+resources:
+  - service-account.yaml
+  - admin-service
+  - api-ingress
+  - hmac-signer
+  - oauth2-signer
+  - http-publisher
+  - profile-service
+  - subscription-service
+  - traffic-service
+  - transformation-service
+  - webhookapi-repo
+  - api-gateway
+  - portal
+  - asyncapi-parser
+  - k8s-ingress
+

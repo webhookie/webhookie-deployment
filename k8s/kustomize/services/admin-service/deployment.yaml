@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: admin-service
+    log-label: "true"
+  name: admin-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin-service
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        co.elastic.logs/enabled: "true"
+        co.elastic.logs.json-logging/json.keys_under_root: "true"
+        co.elastic.logs.json-logging/json.add_error_key: "true"
+        co.elastic.logs.json-logging/json.message_key: "message"
+      labels:
+        app: admin-service
+        log-label: "true"
+    spec:
+      containers:
+      - image: hookiesolutions/webhookie-admin-service
+        name: admin-service
+        resources: {}
+        env:
+          - name: SPRING_CONFIG_IMPORT
+            value: "file:/var/app/data/auth.yml"
+          - name: WH_MONGODB_URI
+            valueFrom:
+              secretKeyRef:
+                name: webhookie-admin-mongodb-secret
+                key: connectionString.standardSrv
+        envFrom:
+          - secretRef:
+              name: auth-env
+          - secretRef:
+              name: rabbitmq-env
+          - secretRef:
+              name: k8s-env
+        volumeMounts:
+          - name: auth-yml-volume
+            mountPath: var/app/data/auth.yml
+            subPath: auth.yml
+#        livenessProbe:
+#          httpGet:
+#            path: /alive
+#            port: 8080
+#          initialDelaySeconds: 15
+#          timeoutSeconds: 5
+        readinessProbe:
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          httpGet:
+            path: /manage/health/readiness
+            port: 8080
+      volumes:
+        - name: auth-yml-volume
+          configMap:
+            name: auth-yml # Name of the ConfigMap which contains definitions you wish to import
+            items:
+              - key: auth.yml
+                path: auth.yml
+      serviceAccountName: webhookie-service-account

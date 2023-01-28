@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+configMapGenerator:
+  - name: kc-realm-config
+    files:
+      - realm.json
+    options:
+      disableNameSuffixHash: true
+  - name: kc-add-user-config
+    files:
+      - keycloak-add-user.json
+    options:
+      disableNameSuffixHash: true
+resources:
+  - deployment.yaml
+  - service.yaml
+  KEYCLOAK_INGRESS
+

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webhookie-prometheus
+  labels:
+    app: webhookie-prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webhookie-prometheus
+  template:
+    metadata:
+      labels:
+        app: webhookie-prometheus
+    spec:
+      containers:
+        - name: webhookie-prometheus
+          image: prom/prometheus
+          volumeMounts:
+#            - name: prometheus-volume
+#              mountPath: "/prometheus"
+            - name: prometheus-config-vol
+              mountPath: /etc/prometheus/prometheus.yml
+              subPath: prometheus.yml
+      volumes:
+        - name: prometheus-config-vol
+          configMap:
+            name: prometheus-config # Name of the ConfigMap which contains definitions you wish to import
+            items:
+              - key: prometheus.yml
+                path: prometheus.yml
+        - name: prometheus-volume
+          persistentVolumeClaim:
+            claimName: prometheus-pvc

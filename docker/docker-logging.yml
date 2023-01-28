@@ -1,0 +1,55 @@
+version: '3.9'
+
+volumes:
+  elasticsearch_data:
+    driver: local
+  kibana_data:
+    driver: local
+
+services:
+  webhookie-elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    container_name: webhookie-elasticsearch
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    ports:
+      - "${ES_PORT}:9200"
+    environment:
+      discovery.type: single-node
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+      bootstrap.memory_lock: "true"
+      xpack.security.enabled: "false"
+      xpack.security.http.ssl.enabled: "false"
+      xpack.security.transport.ssl.enabled: "false"
+    networks:
+      webhookie:
+  webhookie-kibana:
+    image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
+    container_name: webhookie-kibana
+    depends_on:
+      - webhookie-elasticsearch
+    restart: on-failure
+    volumes:
+      - kibana_data:/usr/share/kibana/data
+    ports:
+      - "${KIBANA_PORT}:5601"
+    environment:
+      ELASTICSEARCH_URL: "http://webhookie-elasticsearch:9200"
+      ELASTICSEARCH_HOSTS: "http://webhookie-elasticsearch:9200"
+      ELASTICSEARCH_USERNAME: kibana_system
+      ELASTICSEARCH_PASSWORD: ${KIBANA_PASSWORD}
+    networks:
+      webhookie:
+  webhookie-filebeat:
+    image: docker.elastic.co/beats/filebeat:${STACK_VERSION}
+    volumes:
+      - ./data/filebeat/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro # Configuration file
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro           # Docker logs
+      - /var/run/docker.sock:/var/run/docker.sock:ro                       # Additional information about containers
+    user: root                                                             # Allow access to log files and docker.sock
+    restart: on-failure
+    depends_on:
+      - webhookie-elasticsearch
+      - webhookie-kibana
+    networks:
+      webhookie:

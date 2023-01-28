@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: webhookie-logging
+commonLabels:
+  k8s-app: webhookie-filebeat
+#commonAnnotations:
+configMapGenerator:
+  - name: webhookie-filebeat-config
+    files:
+      - filebeat.yml
+    options:
+      disableNameSuffixHash: true
+generatorOptions:
+  disableNameSuffixHash: true
+resources:
+  - daemon-set.yaml
+  - cluster-role-binding.yaml
+  - role-binding.yaml
+  - config-role-binding.yaml
+  - cluster-role.yaml
+  - role.yaml
+  - config-role.yaml
+  - service-account.yaml
+

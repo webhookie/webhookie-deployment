@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+configMapGenerator:
+  - name: branding-config
+    files:
+      - branding/body.html
+      - branding/favicon.ico
+      - branding/hero.svg
+      - branding/logo.svg
+      - branding/page-title.txt
+      - branding/title.html
+    options:
+      disableNameSuffixHash: true
+secretGenerator:
+  - name: branding-env
+    envs:
+      - ./branding.env
+    options:
+      disableNameSuffixHash: true
+resources:
+  - deployment.yaml
+  - service.yaml

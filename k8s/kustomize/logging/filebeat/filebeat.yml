@@ -1,0 +1,78 @@
+filebeat.inputs:
+#- type: container
+#  paths:
+#   - /var/log/containers/*.log
+# processors:
+#    - add_kubernetes_metadata:
+#        host: ${NODE_NAME}
+#        matchers:
+#          - logs_path:
+#              logs_path: "/var/log/containers/"
+#    - decode_json_fields:
+#        fields: ["_source", "message"]
+#        target: ""
+#        max_depth: 3
+#        process_array: false
+#        overwrite_keys: true
+#        add_error_key: true
+filebeat.autodiscover:
+  providers:
+    - type: kubernetes
+      node: ${NODE_NAME}
+      hints.enabled: true
+      hints.default_config.enabled: false
+      hints.default_config:
+        type: container
+        paths:
+          - /var/log/containers/*-${data.kubernetes.container.id}.log
+        processors:
+          - decode_json_fields:
+              fields: ["_source", "message"]
+              target: ""
+              max_depth: 3
+              process_array: false
+              overwrite_keys: true
+              add_error_key: true
+
+      #processors:
+      #- add_cloud_metadata:
+      #- add_host_metadata:
+
+cloud.id: ${ELASTIC_CLOUD_ID}
+cloud.auth: ${ELASTIC_CLOUD_AUTH}
+
+setup.dashboards.enabled: true
+#setup.kibana.host: "webhookie-kibana-kb-http.webhookie-logging.svc.cluster.local:5601"
+setup.kibana.host: "webhookie-kibana-kb-http:5601"
+setup.kibana.protocol: "https"
+setup.kibana.ssl.verification_mode: "none"
+
+output.elasticsearch:
+  hosts: ['${ELASTICSEARCH_HOST:webhookie-elasticsearch-es-http}:${ELASTICSEARCH_PORT:9200}']
+  ssl.verification_mode: "none"
+  protocol: https
+  username: ${ELASTICSEARCH_USERNAME}
+  password: ${ELASTICSEARCH_PASSWORD}
+filebeat.modules:
+  - module: mongodb
+    log:
+      enabled: true
+      var:
+        paths:
+        - /var/log/containers/webhookie-mongodb*.log
+  - module: rabbitmq
+    log:
+      enabled: true
+      var:
+        paths:
+        - /var/log/containers/webhookie-rabbitmq*.log
+  - module: nginx
+    ingress_controller:
+      enabled: true
+      var.paths:
+        - /var/log/containers/ingress-nginx-controller*.log
+  - module: nginx
+    access:
+      enabled: true
+      var.paths:
+        - /var/log/containers/portal-*.log

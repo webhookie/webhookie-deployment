@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mongo-express
+  name: mongo-express
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-express
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: mongo-express
+    spec:
+      containers:
+        - image: mongo-express
+          name: mongo-express
+          resources: {}
+          env:
+            - name: ME_CONFIG_MONGODB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: webhookie-mongodb-admin-webhookie-user
+                  key: connectionString.standardSrv
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: mongo-express
+  name: mongo-express
+spec:
+  ports:
+    - port: 8081
+      protocol: TCP
+      targetPort: 8081
+  selector:
+    app: mongo-express
+  type: ClusterIP
+status:
+  loadBalancer: {}

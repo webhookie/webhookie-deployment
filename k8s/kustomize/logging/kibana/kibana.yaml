@@ -1,0 +1,16 @@
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: webhookie-kibana
+spec:
+  version: 8.4.0
+  count: 1
+  elasticsearchRef:
+    name: webhookie-elasticsearch
+  http:
+#    tls:
+#      selfSignedCertificate:
+#        disabled: true
+    service:
+      spec:
+        type: LoadBalancer

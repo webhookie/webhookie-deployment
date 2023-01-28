@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: portal
+    log-label: "true"
+  name: portal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: portal
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        co.elastic.logs/enabled: "true"
+        co.elastic.logs.json-logging/json.keys_under_root: "true"
+        co.elastic.logs.json-logging/json.add_error_key: "true"
+        co.elastic.logs.json-logging/json.message_key: "message"
+      labels:
+        app: portal
+        log-label: "true"
+    spec:
+      containers:
+      - image: hookiesolutions/webhookie-portal
+        name: portal
+        imagePullPolicy: Always
+        envFrom:
+          - secretRef:
+              name: branding-env
+        resources: {}
+        volumeMounts:
+          - name: branding-vol
+            mountPath: /var/data/webhookie/branding
+        livenessProbe:
+          httpGet:
+            path: /index.html
+            port: 80
+          initialDelaySeconds: 15
+          timeoutSeconds: 5
+        readinessProbe:
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          httpGet:
+            path: /index.html
+            port: 80
+      volumes:
+        - name: branding-vol
+          configMap:
+            name: branding-config # Name of the ConfigMap which contains definitions you wish to import
+            items:
+              - key: favicon.ico
+                path: favicon.ico
+              - key: hero.svg
+                path: hero.svg
+              - key: logo.svg
+                path: logo.svg
+              - key: body.html
+                path: body.html
+              - key: title.html
+                path: title.html

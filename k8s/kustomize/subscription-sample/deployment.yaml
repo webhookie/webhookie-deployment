@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: subscription-sample
+  name: subscription-sample
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: subscription-sample
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: subscription-sample
+    spec:
+      containers:
+      - image: hookiesolutions/webhookie-subscription-sample:1
+        name: subscription-sample
+        resources: {}
+        env:
+          - name: OKTA_OAUTH2_ISSUER
+            value: https://dev-1807019.okta.com/oauth2/default
+          - name: OKTA_OAUTH2_CLIENT_ID
+            value: 0oa2w5ur9pFnyGW3W5d7
+          - name: OKTA_OAUTH2_CLIENT_SECRET
+            value: 2JWxnSDB1SbqriBvVLDue8fo9i-sXkkwgNafIyh0

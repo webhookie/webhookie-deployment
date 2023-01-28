@@ -1,0 +1,28 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8800/auth/realms/webhookie
+          jwk-set-uri: http://webhookie-keycloak:8080/auth/realms/webhookie/protocol/openid-connect/certs
+          jws-algorithm: RS256
+webhookie:
+  security:
+    audience: webhookie_client
+    client-id: webhookie-client
+    oauth2:
+      authorization-uri: /protocol/openid-connect/auth
+      token-uri: /protocol/openid-connect/token
+      token-name: access_token
+    entity:
+      jwk-json-path: $.entity
+    groups:
+      jwk-json-path: $.groups
+    roles:
+      jwk-json-path: $.realm_access.roles
+      auto-assign-consumer: true
+      role-mapping:
+        USER: WH_USER
+        ADMIN: WH_ADMIN
+        PROVIDER: WH_PROVIDER
+        CONSUMER: WH_CONSUMER

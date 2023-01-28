@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: webhookie-keycloak
+  name: webhookie-keycloak
+spec:
+  ports:
+  - name: admin-traffic
+    port: 9990
+    protocol: TCP
+    targetPort: 9990
+  - name: auth-traffic
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: webhookie-keycloak
+  type: ClusterIP
+status:
+  loadBalancer: {}

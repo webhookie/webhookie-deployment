@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webhookie-grafana
+  labels:
+    app: webhookie-grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webhookie-grafana
+  template:
+    metadata:
+      labels:
+        app: webhookie-grafana
+    spec:
+      containers:
+        - name: webhookie-grafana
+          image: grafana/grafana
+          volumeMounts:
+#            - name: grafana-volume
+#              mountPath: "/var/lib/grafana"
+            - name: datasource-config-vol
+              mountPath: /etc/grafana/provisioning/datasources/datasource.yml
+              subPath: grafana-datasource.yml
+      volumes:
+        - name: datasource-config-vol
+          configMap:
+            name: datasource-config # Name of the ConfigMap which contains definitions you wish to import
+            items:
+              - key: grafana-datasource.yml
+                path: grafana-datasource.yml
+#        - name: jvm-dashboard-config-vol
+#          configMap:
+#            name: jvm-dashboard-config # Name of the ConfigMap which contains definitions you wish to import
+#            items:
+#              - key: "JVM (Micrometer)-dashboard 4701.json"
+#                path: "JVM (Micrometer)-dashboard 4701.json"
+#        - name: spring-dashboard-config-vol
+#          configMap:
+#            name: spring-dashboard-config # Name of the ConfigMap which contains definitions you wish to import
+#            items:
+#              - key: "SpringBoot APM Dashboard-12900.json"
+#                path: "SpringBoot APM Dashboard-12900.json"
+        - name: grafana-volume
+          persistentVolumeClaim:
+            claimName: grafana-pvc

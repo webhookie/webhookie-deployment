@@ -1,0 +1,857 @@
+{
+    "rabbit_version": "3.9.14",
+    "rabbitmq_version": "3.9.14",
+    "product_name": "RabbitMQ",
+    "product_version": "3.9.14",
+    "users": [
+        {
+            "name": "admin",
+            "password_hash": "YG5Os2TOj5XHR6NRf2PBuUQ0u0goDrXxofYoyBVtBGcF1fjX",
+            "hashing_algorithm": "rabbit_password_hashing_sha256",
+            "tags": [
+                "administrator"
+            ],
+            "limits": {}
+        },
+        {
+            "name": "webhookie-admin",
+            "password_hash": "YG5Os2TOj5XHR6NRf2PBuUQ0u0goDrXxofYoyBVtBGcF1fjX",
+            "hashing_algorithm": "rabbit_password_hashing_sha256",
+            "tags": [
+                "administrator"
+            ],
+            "limits": {}
+        }
+    ],
+    "vhosts": [
+        {
+            "name": "webhookie"
+        }
+    ],
+    "permissions": [
+        {
+            "user": "admin",
+            "vhost": "/",
+            "configure": ".*",
+            "write": ".*",
+            "read": ".*"
+        },
+        {
+            "user": "admin",
+            "vhost": "webhookie",
+            "configure": ".*",
+            "write": ".*",
+            "read": ".*"
+        },
+        {
+            "user": "webhookie-admin",
+            "vhost": "webhookie",
+            "configure": ".*",
+            "write": ".*",
+            "read": ".*"
+        }
+    ],
+    "topic_permissions": [],
+    "parameters": [],
+    "global_parameters": [
+        {
+            "name": "internal_cluster_id",
+            "value": "rabbitmq-cluster-id-akYHk80um56rrgPgWfPBPw"
+        },
+        {
+            "name": "cluster_name",
+            "value": "rabbit@webhookie-amqp"
+        }
+    ],
+    "policies": [],
+    "queues": [
+        {
+            "name": "subscription.incoming-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "subscription.webhook-api-deleted",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "subscription.delay-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "subscription.deliver-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "oauth2_signer.oauth2-sign-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "hmac_signer.hmac-sign-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "subscription.apikey-sign-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "subscription.retry-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "subscription.unsuccessful-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "subscription.resend-blocked-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "subscription.unblock-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "subscription.retryable-publisher-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "subscription.resend-span",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "publisher.publish-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "traffic.incoming-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "traffic.publish-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "traffic.increase-tries",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "traffic.mark-as-retrying",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "traffic.add-retry",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "traffic.no-subscription",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "traffic.missing-subscription",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "traffic.trace-unsuccessful-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "traffic.span-unsuccessful-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "traffic.subscription-unblocked",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "traffic.trace-successful-publisher-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "traffic.span-successful-publisher-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "traffic.subscription-error",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "traffic.request-error-publisher-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "traffic.retryable-response-error-publisher-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "traffic.non-retryable-response-error-publisher-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "traffic.other-error-publisher-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "traffic.retryable-publisher-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "traffic.trace-aggregation",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "traffic.span-sse",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "transformation.transform-message",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "webhook.consumer-group-deleted",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "webhook.consumer-group-updated",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "webhook.provider-group-deleted",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "webhook.provider-group-updated",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "webhook.subscription-activated",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "webhook.subscription-deactivated",
+            "vhost": "webhookie",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        }
+    ],
+    "exchanges": [
+        {
+            "name": "admin",
+            "vhost": "webhookie",
+            "type": "direct",
+            "durable": true,
+            "auto_delete": false,
+            "internal": false,
+            "arguments": {}
+        },
+        {
+            "name": "traffic",
+            "vhost": "webhookie",
+            "type": "direct",
+            "durable": true,
+            "auto_delete": false,
+            "internal": false,
+            "arguments": {}
+        },
+        {
+            "name": "ingress",
+            "vhost": "webhookie",
+            "type": "direct",
+            "durable": true,
+            "auto_delete": false,
+            "internal": false,
+            "arguments": {}
+        },
+        {
+            "name": "publisher",
+            "vhost": "webhookie",
+            "type": "direct",
+            "durable": true,
+            "auto_delete": false,
+            "internal": false,
+            "arguments": {}
+        },
+        {
+            "name": "subscription",
+            "vhost": "webhookie",
+            "type": "direct",
+            "durable": true,
+            "auto_delete": false,
+            "internal": false,
+            "arguments": {}
+        },
+        {
+            "name": "transformation",
+            "vhost": "webhookie",
+            "type": "direct",
+            "durable": true,
+            "auto_delete": false,
+            "internal": false,
+            "arguments": {}
+        },
+        {
+            "name": "webhook",
+            "vhost": "webhookie",
+            "type": "direct",
+            "durable": true,
+            "auto_delete": false,
+            "internal": false,
+            "arguments": {}
+        }
+    ],
+    "bindings": [
+        {
+            "source": "admin",
+            "vhost": "webhookie",
+            "destination": "webhook.consumer-group-deleted",
+            "destination_type": "queue",
+            "routing_key": "consumer-group-deleted",
+            "arguments": {}
+        },
+        {
+            "source": "admin",
+            "vhost": "webhookie",
+            "destination": "webhook.consumer-group-updated",
+            "destination_type": "queue",
+            "routing_key": "consumer-group-updated",
+            "arguments": {}
+        },
+        {
+            "source": "admin",
+            "vhost": "webhookie",
+            "destination": "webhook.provider-group-deleted",
+            "destination_type": "queue",
+            "routing_key": "provider-group-deleted",
+            "arguments": {}
+        },
+        {
+            "source": "admin",
+            "vhost": "webhookie",
+            "destination": "webhook.provider-group-updated",
+            "destination_type": "queue",
+            "routing_key": "provider-group-updated",
+            "arguments": {}
+        },
+        {
+            "source": "ingress",
+            "vhost": "webhookie",
+            "destination": "traffic.incoming-message",
+            "destination_type": "queue",
+            "routing_key": "incoming-message",
+            "arguments": {}
+        },
+        {
+            "source": "traffic",
+            "vhost": "webhookie",
+            "destination": "subscription.incoming-message",
+            "destination_type": "queue",
+            "routing_key": "incoming-message",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "subscription.delay-message",
+            "destination_type": "queue",
+            "routing_key": "delay-message",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "transformation.transform-message",
+            "destination_type": "queue",
+            "routing_key": "transform-message",
+            "arguments": {}
+        },
+        {
+            "source": "transformation",
+            "vhost": "webhookie",
+            "destination": "subscription.deliver-message",
+            "destination_type": "queue",
+            "routing_key": "message-transformed",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "subscription.deliver-message",
+            "destination_type": "queue",
+            "routing_key": "deliver-message",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "traffic.mark-as-retrying",
+            "destination_type": "queue",
+            "routing_key": "delay-message",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "traffic.add-retry",
+            "destination_type": "queue",
+            "routing_key": "delay-message",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "traffic.no-subscription",
+            "destination_type": "queue",
+            "routing_key": "no-subscription",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "publisher.publish-message",
+            "destination_type": "queue",
+            "routing_key": "publish-message",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "traffic.publish-message",
+            "destination_type": "queue",
+            "routing_key": "publish-message",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "traffic.increase-tries",
+            "destination_type": "queue",
+            "routing_key": "publish-message",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "traffic.missing-subscription",
+            "destination_type": "queue",
+            "routing_key": "missing-subscription",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "hmac_signer.hmac-sign-message",
+            "destination_type": "queue",
+            "routing_key": "hmac-sign-message",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "subscription.apikey-sign-message",
+            "destination_type": "queue",
+            "routing_key": "apikey-sign-message",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "oauth2_signer.oauth2-sign-message",
+            "destination_type": "queue",
+            "routing_key": "oauth2-sign-message",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "subscription.retry-message",
+            "destination_type": "queue",
+            "routing_key": "retry-message",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "subscription.unsuccessful-message",
+            "destination_type": "queue",
+            "routing_key": "unsuccessful-message",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "traffic.trace-unsuccessful-message",
+            "destination_type": "queue",
+            "routing_key": "unsuccessful-message",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "traffic.span-unsuccessful-message",
+            "destination_type": "queue",
+            "routing_key": "unsuccessful-message",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "traffic.trace-unsuccessful-message",
+            "destination_type": "queue",
+            "routing_key": "blocked-subscription",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "traffic.span-unsuccessful-message",
+            "destination_type": "queue",
+            "routing_key": "blocked-subscription",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "traffic.subscription-unblocked",
+            "destination_type": "queue",
+            "routing_key": "subscription-unblocked",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "subscription.resend-blocked-message",
+            "destination_type": "queue",
+            "routing_key": "resend-blocked-message",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "webhook.subscription-activated",
+            "destination_type": "queue",
+            "routing_key": "subscription-activated",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "webhook.subscription-deactivated",
+            "destination_type": "queue",
+            "routing_key": "subscription-deactivated",
+            "arguments": {}
+        },
+        {
+            "source": "publisher",
+            "vhost": "webhookie",
+            "destination": "traffic.trace-successful-publisher-message",
+            "destination_type": "queue",
+            "routing_key": "successful-publisher-message",
+            "arguments": {}
+        },
+        {
+            "source": "publisher",
+            "vhost": "webhookie",
+            "destination": "traffic.span-successful-publisher-message",
+            "destination_type": "queue",
+            "routing_key": "successful-publisher-message",
+            "arguments": {}
+        },
+        {
+            "source": "subscription",
+            "vhost": "webhookie",
+            "destination": "traffic.subscription-error",
+            "destination_type": "queue",
+            "routing_key": "subscription-error",
+            "arguments": {}
+        },
+        {
+            "source": "publisher",
+            "vhost": "webhookie",
+            "destination": "traffic.request-error-publisher-message",
+            "destination_type": "queue",
+            "routing_key": "request-error-publisher-message",
+            "arguments": {}
+        },
+        {
+            "source": "publisher",
+            "vhost": "webhookie",
+            "destination": "traffic.retryable-response-error-publisher-message",
+            "destination_type": "queue",
+            "routing_key": "response-error-publisher-message",
+            "arguments": {}
+        },
+        {
+            "source": "publisher",
+            "vhost": "webhookie",
+            "destination": "traffic.non-retryable-response-error-publisher-message",
+            "destination_type": "queue",
+            "routing_key": "response-error-publisher-message",
+            "arguments": {}
+        },
+        {
+            "source": "publisher",
+            "vhost": "webhookie",
+            "destination": "traffic.other-error-publisher-message",
+            "destination_type": "queue",
+            "routing_key": "other-error-publisher-message",
+            "arguments": {}
+        },
+        {
+            "source": "publisher",
+            "vhost": "webhookie",
+            "destination": "traffic.retryable-publisher-message",
+            "destination_type": "queue",
+            "routing_key": "retryable-publisher-message",
+            "arguments": {}
+        },
+        {
+            "source": "publisher",
+            "vhost": "webhookie",
+            "destination": "subscription.retryable-publisher-message",
+            "destination_type": "queue",
+            "routing_key": "retryable-publisher-message",
+            "arguments": {}
+        },
+        {
+            "source": "traffic",
+            "vhost": "webhookie",
+            "destination": "subscription.resend-span",
+            "destination_type": "queue",
+            "routing_key": "resend-span",
+            "arguments": {}
+        },
+        {
+            "source": "traffic",
+            "vhost": "webhookie",
+            "destination": "subscription.unblock-message",
+            "destination_type": "queue",
+            "routing_key": "unblock-message",
+            "arguments": {}
+        },
+        {
+            "source": "traffic",
+            "vhost": "webhookie",
+            "destination": "traffic.trace-aggregation",
+            "destination_type": "queue",
+            "routing_key": "trace-aggregation",
+            "arguments": {}
+        },
+        {
+            "source": "traffic",
+            "vhost": "webhookie",
+            "destination": "traffic.span-sse",
+            "destination_type": "queue",
+            "routing_key": "span-sse",
+            "arguments": {}
+        },
+        {
+            "source": "webhook",
+            "vhost": "webhookie",
+            "destination": "subscription.webhook-api-deleted",
+            "destination_type": "queue",
+            "routing_key": "webhook-api-deleted",
+            "arguments": {}
+        }
+    ]
+}

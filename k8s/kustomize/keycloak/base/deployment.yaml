@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: webhookie-keycloak
+  name: webhookie-keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webhookie-keycloak
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: webhookie-keycloak
+    spec:
+      containers:
+      - image: keycloak
+        name: webhookie-keycloak
+        resources: {}
+        env:
+          - name: KEYCLOAK_IMPORT
+            value: /var/data/webhookie/realm.json
+          - name: PROXY_ADDRESS_FORWARDING
+            value: "true"
+          - name: KEYCLOAK_PROXY
+            value: "edge"
+        volumeMounts:
+          - name: kc-realm-vol
+            mountPath: /var/data/webhookie/realm.json
+            subPath: realm.json
+          - name: kc-add-user-vol
+            mountPath: /opt/jboss/keycloak/standalone/configuration/keycloak-add-user.json
+            subPath: keycloak-add-user.json
+      volumes:
+        - name: kc-realm-vol
+          configMap:
+            name: kc-realm-config # Name of the ConfigMap which contains definitions you wish to import
+            items:
+              - key: realm.json
+                path: realm.json
+        - name: kc-add-user-vol
+          configMap:
+            name: kc-add-user-config # Name of the ConfigMap which contains definitions you wish to import
+            items:
+              - key: keycloak-add-user.json
+                path: keycloak-add-user.json

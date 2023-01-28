@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: subscription-service
+  name: subscription-service
+spec:
+  ports:
+  - name: http-traffic
+    port: 8086
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: subscription-service
+  type: ClusterIP
+status:
+  loadBalancer: {}

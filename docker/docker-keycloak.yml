@@ -1,0 +1,33 @@
+version: '3.9'
+
+x-services-medium-env:
+  &services-medium-env
+  JAVA_TOOL_OPTIONS: "-Xms${MEDIUM_MS_MEM}M -Xmx${MEDIUM_MX_MEM}M"
+
+x-services-medium:
+  &services-medium
+  limits:
+    cpus: "${MEDIUM_CPU_LIMIT}"
+    memory: "${MEDIUM_MX_MEM}M"
+  reservations:
+    cpus: "${MEDIUM_CPU_RES}"
+    memory: "${MEDIUM_MS_MEM}M"
+
+services:
+  webhookie-keycloak:
+    image: ${KEYCLOAK_IMAGE}
+    volumes:
+      - ./data/keycloak/realm-export.json:/var/data/webhookie/realm.json
+      - ./data/keycloak/kc-add-user.json:/opt/jboss/keycloak/standalone/configuration/keycloak-add-user.json
+    container_name: webhookie-keycloak
+    deploy:
+      resources:
+        *services-medium
+    environment:
+      <<: *services-medium-env
+      KEYCLOAK_IMPORT: /var/data/webhookie/realm.json
+    ports:
+      - "9900:9990"
+      - "8800:8080"
+    networks:
+      webhookie:

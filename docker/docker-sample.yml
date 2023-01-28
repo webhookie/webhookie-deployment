@@ -1,0 +1,14 @@
+version: '3.9'
+
+services:
+  subscription:
+    container_name: webhookie-subscription-sample
+    image: hookiesolutions/webhookie-subscription-sample:1
+    ports:
+      - "9000:9000"
+    networks:
+      webhookie:
+    environment:
+      OKTA_OAUTH2_ISSUER: https://dev-1807019.okta.com/oauth2/default
+      OKTA_OAUTH2_CLIENT_ID: 0oa2w5ur9pFnyGW3W5d7
+      OKTA_OAUTH2_CLIENT_SECRET: 2JWxnSDB1SbqriBvVLDue8fo9i-sXkkwgNafIyh0

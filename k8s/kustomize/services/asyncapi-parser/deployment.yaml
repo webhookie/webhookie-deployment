@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    log-label: "true"
+    app: asyncapi-parser
+  name: asyncapi-parser
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: asyncapi-parser
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        log-label: "true"
+        app: asyncapi-parser
+    spec:
+      containers:
+      - image: hookiesolutions/webhookie-asyncapi-service
+        name: asyncapi-parser
+        resources: {}
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: 3000
+          initialDelaySeconds: 15
+          timeoutSeconds: 5
+        readinessProbe:
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          httpGet:
+            path: /ping
+            port: 3000
+      serviceAccountName: webhookie-service-account

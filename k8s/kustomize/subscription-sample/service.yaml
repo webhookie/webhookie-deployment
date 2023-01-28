@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: subscription-sample
+  name: subscription-sample
+spec:
+  ports:
+  - name: 9010-9010
+    port: 9010
+    protocol: TCP
+    targetPort: 9010
+  selector:
+    app: subscription-sample
+  type: ClusterIP
+status:
+  loadBalancer: {}

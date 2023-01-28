@@ -1,0 +1,69 @@
+version: '3.9'
+
+networks:
+  webhookie-dev:
+
+volumes:
+  mongodb_data:
+    driver: local
+
+services:
+  webhookie-mongo:
+    container_name: webhookie-mongo
+    image: mongo:5.0.9
+    ports:
+      - "27017:27017"
+    volumes:
+      - 'mongodb_data:/data/db'
+    networks:
+      webhookie-dev:
+  webhookie-mongo-express:
+    image: mongo-express
+    restart: always
+    depends_on:
+      - webhookie-mongo
+    ports:
+      - "9999:8081"  # maps container's 8081 to host's 9999
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://webhookie-mongo:27017/
+    networks:
+      webhookie-dev:
+  webhookie-amqp:
+    restart: always
+    image: rabbitmq:management
+    hostname: webhookie-amqp
+    stdin_open: true
+    tty: true
+    ports:
+      - "0.0.0.0:5672:5672/tcp"
+      - "0.0.0.0:15672:15672/tcp"
+    volumes:
+      - ./data/rabbit/webhookie-rabbitmq.config:/etc/rabbitmq/rabbitmq.config
+      - ./data/rabbit/webhookie-rabbit-definitions.json:/etc/rabbitmq/definitions.json
+    networks:
+      webhookie-dev:
+  registry-service:
+    container_name: registry-service
+    image: hookiesolutions/webhookie-registry-service:beta
+    ports:
+      - "8761:8761"
+    networks:
+      webhookie-dev:
+  subscription-sample:
+    container_name: webhookie-subscription-sample
+    image: hookiesolutions/webhookie-subscription-sample:1
+    ports:
+      - "9010:9010"
+    networks:
+      webhookie-dev:
+    environment:
+      OKTA_OAUTH2_ISSUER: https://dev-1807019.okta.com/oauth2/default
+      OKTA_OAUTH2_CLIENT_ID: 0oa2w5ur9pFnyGW3W5d7
+      OKTA_OAUTH2_CLIENT_SECRET: 2JWxnSDB1SbqriBvVLDue8fo9i-sXkkwgNafIyh0
+  asyncapi-parser:
+    container_name: asyncapi-parser
+    image: hookiesolutions/webhookie-asyncapi-service:beta
+    ports:
+      - "3000:3000"
+    networks:
+      webhookie-dev:

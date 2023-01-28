@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  namespace: webhookie-services
+  name: webhookapi-repo
+  labels:
+    release: webhookie-prometheus # This name must match 'Prometheus Operator' release name!!!
+spec:
+  selector:
+    matchLabels:
+      app: webhookapi-repo
+  endpoints:
+    - port: http-traffic
+      path: "/manage/prometheus"

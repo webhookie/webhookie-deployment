@@ -1,0 +1,38 @@
+name: Release Scripts
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Zip Scripts
+        run: zip -r k8s-scripts.zip .
+        working-directory: k8s/kustomize
+      - name: Generate build number
+        uses: onyxmueller/build-tag-number@v1
+        with:
+          token: ${{secrets.github_token}}
+      - name: release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: false
+          prerelease: false
+          release_name: v1.0.${{ env.BUILD_NUMBER }}
+          tag_name: v1.0.${{ env.BUILD_NUMBER }}
+#          body_path: CHANGELOG.md
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: upload artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: k8s/kustomize/k8s-scripts.zip
+          asset_name: k8s-scripts.zip
+          asset_content_type: application/zip
+

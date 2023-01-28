@@ -1,0 +1,34 @@
+version: '3.9'
+
+x-services-small:
+  &services-small
+  limits:
+    cpus: "${SMALL_CPU_LIMIT}"
+    memory: "${SMALL_MX_MEM}M"
+  reservations:
+    cpus: "${SMALL_CPU_RES}"
+    memory: "${SMALL_MS_MEM}M"
+
+services:
+  webhookie-portal:
+    container_name: webhookie-portal
+    image: hookiesolutions/webhookie-portal:${WEBHOOKIE_TAG}
+    volumes:
+      - ${WEBHOOKIE_BRANDING_PATH}:/var/data/webhookie/branding
+    ports:
+      - "4200:80"
+    networks:
+      webhookie:
+    deploy:
+      resources:
+        *services-small
+    environment:
+      WEBHOOKIE_MAIN_COLOR: '${WEBHOOKIE_BRANDING_COLOR}'
+#      WEBHOOKIE_MAIN_COLOR: '#090A3A'
+#      WEBHOOKIE_PAGE_TITLE: The API Hunt by webhookie
+#      WEBHOOKIE_MAIN_BODY_HTML: |+
+#        We will be sending out clues via our API Hunt Webhook API. Subscribe to the clues topic and you will recieve the clues the moment we release them.
+#        Solve the clues and you will discover the API details to answer the puzzle.
+#        We hope you enjoy the hunt and enjoy using webhookie - add webhook API capabiltiy to your product in minutes - <a target="_blank" href="https://webhookie.com">learn more</a>.
+#      WEBHOOKIE_MAIN_TITLE_HTML: |+
+#        Join the API HUNT

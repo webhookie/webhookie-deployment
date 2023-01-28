@@ -1,0 +1,57 @@
+version: '3.9'
+
+x-services-volume:
+  &services-volume
+  type: bind
+  source: ./data
+  target: /var/app/data
+
+x-service-labels:
+  &default-labels
+  collect_logs_with_filebeat: "true"
+  decode_log_event_to_json_object: "true"
+
+x-services-medium-env:
+  &services-medium-env
+  JAVA_TOOL_OPTIONS: "-Xms${MEDIUM_MS_MEM}M -Xmx${MEDIUM_MX_MEM}M"
+
+x-services-medium:
+  &services-medium
+  limits:
+    cpus: "${MEDIUM_CPU_LIMIT}"
+    memory: "${MEDIUM_MX_MEM}M"
+  reservations:
+    cpus: "${MEDIUM_CPU_RES}"
+    memory: "${MEDIUM_MS_MEM}M"
+
+services:
+  api-gateway:
+    container_name: api-gateway
+    image: hookiesolutions/webhookie-api-gateway:${WEBHOOKIE_TAG}
+    volumes:
+      - *services-volume
+    ports:
+      - "8080:8080"
+    networks:
+      webhookie:
+    depends_on:
+      - admin-service
+      - api-ingress
+      - hmac-signer
+      - oauth2-signer
+      - http-publisher
+      - profile-service
+      - subscription-service
+      - traffic-service
+      - webhookapi-repo
+    deploy:
+      resources:
+        *services-medium
+    env_file:
+      - ${AUTH_ENV}
+    environment:
+      <<: *services-medium-env
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_CONFIG_IMPORT: "file:./var/app/data/auth.yml"
+    labels:
+      <<: *default-labels

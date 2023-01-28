@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  webhookie-prometheus:
+    container_name: webhookie-prometheus
+    image: prom/prometheus
+    volumes:
+      - ./data/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      webhookie:
+  webhookie-grafana:
+    container_name: webhookie-grafana
+    image: grafana/grafana
+    volumes:
+      - ./data/grafana/grafana-datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+      - ./data/grafana/storage:/var/lib/grafana
+    ports:
+      - "4000:3000"
+    networks:
+      webhookie:
+    depends_on:
+      - webhookie-prometheus

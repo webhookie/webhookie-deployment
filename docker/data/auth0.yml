@@ -1,0 +1,29 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://webhookie.au.auth0.com/
+          jwk-set-uri: https://webhookie.au.auth0.com/.well-known/jwks.json
+          jws-algorithms:
+            - RS256
+webhookie:
+  security:
+    allowed-origins: http://localhost:4200, http://localhost:4201
+    audience: http://localhost:8080
+    client-id: ${AUTH0_CLIENT_ID}
+    oauth2:
+      authorization-uri: authorize
+      token-uri: oauth/token
+    entity:
+      jwk-json-path: $['https://webhookie.com/entity']
+    groups:
+      jwk-json-path: $['https://webhookie.com/groups']
+    roles:
+      jwk-json-path: $['https://webhookie.com/roles']
+      auto-assign-consumer: true
+      role-mapping:
+        USER: WH_USER
+        ADMIN: WH_ADMIN
+        PROVIDER: WH_PROVIDER
+        CONSUMER: WH_CONSUMER

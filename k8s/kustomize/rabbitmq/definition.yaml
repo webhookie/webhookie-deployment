@@ -1,0 +1,27 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbitmq
+spec:
+  replicas: 1
+  override:
+    statefulSet:
+      spec:
+        template:
+          spec:
+            containers:
+            - name: rabbitmq
+              volumeMounts:
+              - name: def-volume
+                mountPath: /etc/rabbitmq/definitions.json
+                subPath: definitions.json
+            volumes:
+            - name: def-volume
+              configMap:
+                name: webhookie-definitions-config # Name of the ConfigMap which contains definitions you wish to import
+                items:
+                  - key: definitions.json
+                    path: definitions.json
+  rabbitmq:
+    additionalConfig: |
+      load_definitions = /etc/rabbitmq/definitions.json

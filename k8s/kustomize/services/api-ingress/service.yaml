@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: api-ingress
+  name: api-ingress
+spec:
+  ports:
+  - name: http-traffic
+    port: 8083
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: api-ingress
+  type: ClusterIP
+status:
+  loadBalancer: {}

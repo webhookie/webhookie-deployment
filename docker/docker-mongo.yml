@@ -1,0 +1,27 @@
+version: '3.9'
+
+volumes:
+  mongodb_data:
+    driver: local
+
+services:
+  webhookie-mongo:
+    container_name: webhookie-mongo
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - 'mongodb_data:/data/db'
+    networks:
+      webhookie:
+  webhookie-mongo-express:
+    image: mongo-express
+    restart: always
+    depends_on:
+      - webhookie-mongo
+    ports:
+      - "9999:8081"  # maps container's 8081 to host's 9999
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://webhookie-mongo:27017/
+    networks:
+      webhookie:

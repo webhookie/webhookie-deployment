@@ -1,0 +1,28 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${WH_IAM_ISSUER_URI}
+          jwk-set-uri: ${WH_IAM_JWK_SET_URI}
+          jws-algorithm: ${WH_IAM_JWS_ALG}
+webhookie:
+  security:
+    add-default-group: ${WH_SECURITY_ADD_DEFAULT_GROUP:true}
+    audience: ${WH_SECURITY_AUD}
+    client-id: ${WH_SECURITY_CLIENT_ID}
+    groups:
+      jwk-json-path: ${WH_SECURITY_GROUPS_JSON_PATH}
+    oauth2:
+      authorization-uri: ${WH_SECURITY_OAUTH2_AUTHORIZATION_URI}
+      token-uri: ${WH_SECURITY_OAUTH2_TOKEN_URI}
+      token-name: ${WH_SECURITY_OAUTH2_TOKEN_NAME}
+    entity:
+      jwk-json-path: ${WH_SECURITY_ENTITY_JSON_PATH}
+    roles:
+      jwk-json-path: ${WH_SECURITY_ROLES_JSON_PATH}
+      auto-assign-consumer: ${WH_SECURITY_AUTO_ASSIGN_CONSUMER_ROLE}
+    no-auth:
+      pathMatchers:
+        OPTIONS: /**
+        GET: /manage/prometheus, /manage/health/**, /swagger-ui.html**, /v3/**, /webjars/swagger-ui/**, /public/**, /alive
