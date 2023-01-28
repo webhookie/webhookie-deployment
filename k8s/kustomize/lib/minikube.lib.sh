@@ -13,7 +13,7 @@ portForward() {
 
   # shellcheck disable=SC2086,SC2069
   kubectl port-forward -n "$NS" service/"$SERVICE" $localPort:$servicePort &> /dev/null &
-  finished
+  installed "$localPort:$servicePort port forwarded successfully!"
 #  kubectl port-forward -n "$NS" service/"$SERVICE" $localPort:$servicePort > /dev/null 2>&1 &
 }
 
@@ -22,7 +22,7 @@ postInitCluster() {
 }
 
 initCluster() {
-  info "Current Cluster is running on ${color_green}minikube${color_reset}."
+  LOG_INFO "Current Cluster is running on ${color_green}minikube${color_reset}."
   setKeycloakIngress ""
 
   if [[ $(arch) == 'arm64' ]]; then
@@ -34,10 +34,10 @@ initCluster() {
   deploying "Installing ingress addon"
   #ingress_status=$(minikube addons list -o json | jq '.ingress.Status')
   minikube addons enable ingress &> /dev/null
-  finished
+  installed "Ingress addon has been installed successfully!"
 }
 
 waitForCluster() {
-  info "Current Cluster is running on minikube."
+  LOG_INFO "Current Cluster is running on minikube."
   waitForInput "*** Please open a new terminal and run 'minikube tunnel' command and keep that terminal open\n"
 }

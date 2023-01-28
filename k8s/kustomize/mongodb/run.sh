@@ -6,20 +6,20 @@ LOG_INFO "🌟 Installing Mongodb..."
 operator=crd/0.7.6
 
 deployCRD() {
-  declare instance
+  declare instance message
   instance=$(kubectl get crd/mongodbcommunity.mongodbcommunity.mongodb.com 2>/dev/null | grep mongodb | awk '{print $1}' &> /dev/null)
+  message="MongoDB CRD has been installed successfully!"
   # shellcheck disable=SC3020
   if [ -z "$instance" ]; then
     deploying "Installing MongoDB CRD"
 
     kustomize build ./$operator/config/crd | kubectl apply -f &> /dev/null -
-    installed
 
     deploying "\t️⚡️ Verifying Mongodb CRD..."
     kubectl get crd/mongodbcommunity.mongodbcommunity.mongodb.com &> /dev/null
-    installed
+    installed "$message"
   else
-    installed
+    installed "$message"
   fi
 }
 
@@ -32,19 +32,19 @@ deployRBAC() {
   # shellcheck disable=SC2069,SC3020
   kubectl create ns "$NS" &> /dev/null
   kustomize build ./$operator/config/rbac | kubectl apply --namespace "$NS" -f 1>/dev/null -
-  installed
+  installed "Mongodb RBAC has been deployed successfully!"
 }
 
 deployOperator() {
   deploying "Installing Mongodb Operator"
   kustomize build ./$operator/config/manager | kubectl apply --namespace "$NS" -f 1>/dev/null -
-  installed
+  installed "Mongodb Operator has been installed successfully!"
 }
 
 deployReplicaSet() {
   deploying "Deploying Mongodb replica set"
   kustomize build . | kubectl apply --namespace "$NS" -f 1>/dev/null -
-  installed
+  installed "Mongodb replica set has been deployed successfully!"
 }
 
 deployOperatorUsingHelm() {
@@ -53,7 +53,7 @@ deployOperatorUsingHelm() {
   helm repo add mongodb https://mongodb.github.io/helm-charts &> /dev/null
   helm repo update &> /dev/null
   helm install community-operator mongodb/community-operator --namespace "$NS" &> /dev/null
-  installed
+  installed "Mongodb Operator has been installed successfully!"
 }
 
 # shellcheck disable=SC3020

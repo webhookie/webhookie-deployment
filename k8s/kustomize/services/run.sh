@@ -1,5 +1,6 @@
 #!/bin/bash
-. ../lib/lib.shLOG_INFO "🌟 Installing webhookie..."
+. ../lib/lib.sh
+info "🌟 Installing webhookie..."
 NS="$1"
 
 # shellcheck disable=SC3020
@@ -12,7 +13,7 @@ kubectl create ns "$NS" &> /dev/null
 run() {
   deploying "$1"
   kustomize build . | kubectl "$command" --namespace "$NS" -f 1>/dev/null -
-  finished
+  installed "webhookie has been deployed successfully!"
 }
 
 delete() {

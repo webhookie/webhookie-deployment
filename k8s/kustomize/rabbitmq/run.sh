@@ -6,7 +6,7 @@ NS="$1"
 installOperator() {
   deploying "Installing RabbitMQ Operator"
   kubectl apply -f "https://github.com/rabbitmq/cluster-operator/releases/latest/download/cluster-operator.yml" 1>/dev/null
-  installed
+  installed "RabbitMQ Operator has been installed successfully!"
 }
 
 deploy() {
@@ -14,7 +14,7 @@ deploy() {
   # shellcheck disable=SC3020
   kubectl create ns "$NS" &> /dev/null
   kustomize build . | kubectl apply --namespace "$NS" -f 1>/dev/null -
-  installed
+  installed "RabbitMQ replica set has been deployed successfully!"
 }
 
 # shellcheck disable=SC3020

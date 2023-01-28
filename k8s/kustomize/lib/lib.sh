@@ -104,18 +104,13 @@ LOG_SUCCESS() {
   LOG "SUCCESS" "$1"
 }
 
-finished() {
-  LOG_SUCCESS "✅ Completed!"
-#  printf "✅️\n"
-}
-
 deploying() {
 #  printf "\t⚙️  %s..." "$1"
   LOG_INFO "⚙️  $1..."
 }
 
 installed() {
-  finished
+  LOG_SUCCESS "✅ $1"
 }
 
 ready() {
@@ -178,7 +173,7 @@ verify() {
       sleep $timeout
     fi
   done
-  installed
+  installed "$pod is successfully $status in namespace: $NS"
 
   #  echo ""
   ready "$service is up and running"

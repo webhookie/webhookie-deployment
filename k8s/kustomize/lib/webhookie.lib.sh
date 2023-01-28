@@ -18,7 +18,7 @@ waitForGateway() {
   local i=0
 
   declare health_endpoint="$url/api/manage/health"
-  local message="Waiting fro $url"
+  local message="Waiting for $url"
   progress "$message"
   until curl --output /dev/null --silent --head --fail "$health_endpoint"; do
     i=$(( (i+1) %4 ))
@@ -26,5 +26,5 @@ waitForGateway() {
     LOG_WAIT "$message"
     sleep 5
   done
-  finished
+  installed "webhookie gateway is ready."
 }

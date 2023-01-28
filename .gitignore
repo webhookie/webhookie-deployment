@@ -1,2 +1,5 @@
 .idea
 *.iml
+k8s/kustomize/keycloak/base/kustomization.yaml
+k8s/kustomize/keycloak/base/realm.json
+k8s/kustomize/services/data/auth.env

@@ -9,7 +9,7 @@ kubectl create ns "$NS" &> /dev/null
 withKustomize() {
   deploying "Installing Prometheus and Grafana"
   kustomize build . | kubectl apply --namespace "$NS" -f 1>/dev/null -
-  installed
+  installed "Prometheus and Grafana have been installed successfully!"
 }
 
 withHelm() {

@@ -30,7 +30,7 @@ verifyCommand "helm" "$(helm version --short 2>&1 >/dev/null)"
 usingVersion "helm" "$(helm version --short)"
 
 # shellcheck disable=SC2086
-if [ $isEKS ]; then
+if [ "$isEKS" == "true" ]; then
   verifyCommand "eksctl" "$(eksctl version 2>&1 >/dev/null)"
   usingVersion "eksctl" "$(eksctl version)"
   eksctlVersion=$(eksctl version)

@@ -69,7 +69,7 @@ cleanup() {
   rm -rf services/data/auth.env
   rm -rf keycloak/base/realm.json
   rm -rf keycloak/base/kustomization.yaml
-  finished
+  installed "deployment workspace has been cleaned up successfully!"
 }
 
 setup
