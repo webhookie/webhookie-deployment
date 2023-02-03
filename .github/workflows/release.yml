@@ -26,6 +26,7 @@ jobs:
 #          body_path: CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          ASSET_VERSION: v1.0.${{ env.BUILD_NUMBER }}
       - name: upload artifact
         uses: actions/upload-release-asset@v1
         env:
@@ -33,6 +34,6 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: k8s/kustomize/k8s-scripts.zip
-          asset_name: webhookie-k8s-scripts-v1.0.${{ env.BUILD_NUMBER }}.zip
+          asset_name: webhookie-k8s-scripts-${{ env.ASSET_VERSION }}.zip
           asset_content_type: application/zip
 
