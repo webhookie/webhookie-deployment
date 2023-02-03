@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Zip Scripts
-        run: zip -r k8s-scripts.zip .
+        run: zip -r webhookie-k8s-scripts.zip .
         working-directory: k8s/kustomize
       - name: Generate build number
         uses: onyxmueller/build-tag-number@v1
@@ -26,14 +26,14 @@ jobs:
 #          body_path: CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          ASSET_VERSION: v1.0.${{ env.BUILD_NUMBER }}
+          MY_TEST: test1
       - name: upload artifact
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: k8s/kustomize/k8s-scripts.zip
-          asset_name: webhookie-k8s-scripts-${{ env.ASSET_VERSION }}.zip
+          asset_path: k8s/kustomize/webhookie-k8s-scripts.zip
+          asset_name: webhookie-k8s-scripts-${{env.MY_TEST}}.zip
           asset_content_type: application/zip
 
