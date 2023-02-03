@@ -8,8 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - name: Copy Files to a folder
+        run: mkdir webhookie && cp -r * webhookie
+        working-directory: k8s/kustomize
       - name: Zip Scripts
-        run: zip -r webhookie-k8s-scripts.zip .
+        run: zip -r webhookie-k8s-scripts.zip webhookie
         working-directory: k8s/kustomize
       - name: Generate build number
         uses: onyxmueller/build-tag-number@v1
