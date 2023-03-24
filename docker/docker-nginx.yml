@@ -1,0 +1,28 @@
+version: '3.9'
+
+x-services-small:
+  &services-small
+  limits:
+    cpus: "${SMALL_CPU_LIMIT}"
+    memory: "${SMALL_MX_MEM}M"
+  reservations:
+    cpus: "${SMALL_CPU_RES}"
+    memory: "${SMALL_MS_MEM}M"
+
+services:
+  webhookie-web:
+    container_name: webhookie-web
+    image: nginx:latest
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/api.headers:/etc/nginx/conf.d/api.headers:ro
+    ports:
+      - "4200:80"
+    networks:
+      webhookie:
+    depends_on:
+      - webhookie-portal
+      - api-gateway
+    deploy:
+      resources:
+        *services-small

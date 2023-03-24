@@ -36,6 +36,7 @@ $modules = [System.Collections.ArrayList](
   "services",
   "gateway",
   "portal",
+  "nginx",
   "logging",
   "monitoring",
   "sample"

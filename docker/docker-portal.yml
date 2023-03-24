@@ -15,8 +15,8 @@ services:
     image: hookiesolutions/webhookie-portal:${WEBHOOKIE_TAG}
     volumes:
       - ${WEBHOOKIE_BRANDING_PATH}:/var/data/webhookie/branding
-    ports:
-      - "4200:80"
+#    ports:
+#      - "4200:80"
     networks:
       webhookie:
     deploy:

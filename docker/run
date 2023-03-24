@@ -23,6 +23,7 @@ declare modules=(
   "services"
   "gateway"
   "portal"
+  "nginx"
   "logging"
   "monitoring"
   "sample"
@@ -119,7 +120,7 @@ init() {
 run () {
   {
     cat ./elk.env
-    cat ./res/env.res.$size
+    cat ./res/env.res."$size"
     echo "WEBHOOKIE_BRANDING_PATH=$branding_path"
     echo "WEBHOOKIE_TAG=$version"
     echo "KEYCLOAK_IMAGE=$keycloak_image"
