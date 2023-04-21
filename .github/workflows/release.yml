@@ -15,24 +15,13 @@ jobs:
       - name: create asset zip files
         run: chmod +x release.sh && ./release.sh
         working-directory: .
-      - name: release-version
+      - name: release
         uses: actions/create-release@v1
-        id: create_release_version
+        id: create_release
         with:
           draft: false
           prerelease: false
-          release_name: v1.0.${{ env.BUILD_NUMBER }}
-          tag_name: v1.0.${{ env.BUILD_NUMBER }}
-#          body_path: CHANGELOG.md
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-      - name: release-latest
-        uses: actions/create-release@v1
-        id: create_release_latest
-        with:
-          draft: false
-          prerelease: false
-          release_name: v1.0.${{ env.BUILD_NUMBER }}
+          release_name: latest
           tag_name: v1.0.${{ env.BUILD_NUMBER }}
 #          body_path: CHANGELOG.md
         env:
@@ -42,7 +31,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          upload_url: ${{ steps.create_release_latest.outputs.upload_url }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./webhookie-k8s-scripts.zip
           asset_name: webhookie-k8s-scripts.zip
           asset_content_type: application/zip
@@ -51,7 +40,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          upload_url: ${{ steps.create_release_latest.outputs.upload_url }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./webhookie-docker-compose-scripts.zip
           asset_name: webhookie-docker-compose-scripts.zip
           asset_content_type: application/zip
