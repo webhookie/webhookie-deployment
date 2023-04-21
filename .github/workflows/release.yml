@@ -13,7 +13,7 @@ jobs:
           token: ${{secrets.github_token}}
       - uses: actions/checkout@v1
       - name: create asset zip files
-        run: ./release.sh
+        run: chmod +x release.sh && ./release.sh
         working-directory: .
       - name: release
         uses: actions/create-release@v1
