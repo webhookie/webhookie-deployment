@@ -15,9 +15,9 @@ jobs:
       - name: create asset zip files
         run: chmod +x release.sh && ./release.sh
         working-directory: .
-      - name: release
+      - name: release-version
         uses: actions/create-release@v1
-        id: create_release
+        id: create_release_version
         with:
           draft: false
           prerelease: false
