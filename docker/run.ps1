@@ -7,10 +7,10 @@ param (
   $command = "up",
   $arm = "false",
   $authProvider = "keycloak",
-  $noLogging = "false",
-  $noMonitoring = "false",
+  $withLogging = "false",
+  $withMonitoring = "false",
   $noMongo = "false",
-  $noSample = "false",
+  $withSample = "false",
   $noRabbit = "false",
   $noPortal = "false",
   $noRegistry = "false"
@@ -36,10 +36,7 @@ $modules = [System.Collections.ArrayList](
   "services",
   "gateway",
   "portal",
-  "nginx",
-  "logging",
-  "monitoring",
-  "sample"
+  "nginx"
 )
 
 if ($arm -eq 'true' ) {
@@ -50,17 +47,17 @@ if ( $size -eq "" ) {
   $size = $default_size
 }
 
-if ($noLogging -eq "true") {
-  $modules.Remove("logging")
+if ($withLogging -eq "true") {
+  $modules.Add("logging")
 }
-if ($noMonitoring -eq "true") {
-  $modules.Remove("monitoring")
+if ($withMonitoring -eq "true") {
+  $modules.Add("monitoring")
 }
 if ($noMongo -eq "true") {
   $modules.Remove("mongo")
 }
-if ($noSample -eq "true") {
-  $modules.Remove("sample")
+if ($withSample -eq "true") {
+  $modules.Add("sample")
 }
 if ($noRabbit -eq "true") {
   $modules.Remove("rabbit")

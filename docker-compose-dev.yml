@@ -10,7 +10,7 @@ volumes:
 services:
   webhookie-mongo:
     container_name: webhookie-mongo
-    image: mongo:5.0.9
+    image: mongo:latest
     ports:
       - "27017:27017"
     volumes:

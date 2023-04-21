@@ -12,17 +12,8 @@ jobs:
         with:
           token: ${{secrets.github_token}}
       - uses: actions/checkout@v1
-      - name: Copy k8s Files to a folder
-        run: mkdir webhookie-k8s-v1.0.${{ env.BUILD_NUMBER }} && cp -r kustomize/* ./webhookie-k8s-v1.0.${{ env.BUILD_NUMBER }}
-        working-directory: k8s
-      - name: Copy docker Files to a folder
-        run: mkdir webhookie-docker-compose-v1.0.${{ env.BUILD_NUMBER }} && cp -r docker/* webhookie-docker-compose-v1.0.${{ env.BUILD_NUMBER }}
-        working-directory: .
-      - name: Zip k8s Scripts
-        run: zip -r webhookie-k8s-scripts.zip webhookie-k8s-v1.0.${{ env.BUILD_NUMBER }}
-        working-directory: k8s
-      - name: Zip docker Scripts
-        run: zip -r webhookie-docker-compose-scripts.zip webhookie-docker-compose-v1.0.${{ env.BUILD_NUMBER }}
+      - name: create asset zip files
+        run: ./release.sh
         working-directory: .
       - name: release
         uses: actions/create-release@v1
@@ -42,7 +33,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: k8s/webhookie-k8s-scripts.zip
-          asset_name: webhookie-k8s-scripts-v1.0.${{ env.BUILD_NUMBER }}.zip
+          asset_name: webhookie-k8s-scripts.zip
           asset_content_type: application/zip
       - name: upload docker artifact
         uses: actions/upload-release-asset@v1
@@ -51,6 +42,6 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./webhookie-docker-compose-scripts.zip
-          asset_name: webhookie-docker-compose-scripts-v1.0.${{ env.BUILD_NUMBER }}.zip
+          asset_name: webhookie-docker-compose-scripts.zip
           asset_content_type: application/zip
 

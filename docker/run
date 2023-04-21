@@ -24,9 +24,6 @@ declare modules=(
   "gateway"
   "portal"
   "nginx"
-  "logging"
-  "monitoring"
-  "sample"
 )
 
 init() {
@@ -65,14 +62,14 @@ init() {
     --auth0)
       auth_provider="auth0"
       ;;
-    --no-logging)
-      modules=("${modules[@]/"logging"}")
+    --with-logging)
+      modules+=("logging")
       ;;
-    --no-monitoring)
-      modules=("${modules[@]/"monitoring"}")
+    --with-monitoring)
+      modules+=("monitoring")
       ;;
-    --no-sample)
-      modules=("${modules[@]/"sample"}")
+    --with-sample)
+      modules+=("sample")
       ;;
     --no-mongo)
       modules=("${modules[@]/"mongo"}")
