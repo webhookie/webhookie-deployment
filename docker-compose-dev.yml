@@ -38,17 +38,17 @@ services:
       - "0.0.0.0:5672:5672/tcp"
       - "0.0.0.0:15672:15672/tcp"
     volumes:
-      - ./data/rabbit/webhookie-rabbitmq.config:/etc/rabbitmq/rabbitmq.config
-      - ./data/rabbit/webhookie-rabbit-definitions.json:/etc/rabbitmq/definitions.json
+      - ./docker/data/rabbit/webhookie-rabbitmq.config:/etc/rabbitmq/rabbitmq.config
+      - ./docker/data/rabbit/webhookie-rabbit-definitions.json:/etc/rabbitmq/definitions.json
     networks:
       webhookie-dev:
-  registry-service:
-    container_name: registry-service
-    image: hookiesolutions/webhookie-registry-service:beta
-    ports:
-      - "8761:8761"
-    networks:
-      webhookie-dev:
+#  registry-service:
+#    container_name: registry-service
+#    image: hookiesolutions/webhookie-registry-service:beta
+#    ports:
+#      - "8761:8761"
+#    networks:
+#      webhookie-dev:
   subscription-sample:
     container_name: webhookie-subscription-sample
     image: hookiesolutions/webhookie-subscription-sample:1

@@ -66,7 +66,6 @@ services:
     depends_on:
       - webhookie-mongo
       - webhookie-amqp
-      - registry-service
     deploy:
       resources: 
         *services-small
@@ -89,7 +88,6 @@ services:
       webhookie:
     depends_on:
       - webhookie-amqp
-      - registry-service
     deploy:
       resources:
         *services-small
@@ -112,7 +110,6 @@ services:
       webhookie:
     depends_on:
       - webhookie-amqp
-      - registry-service
     deploy:
       resources:
         *services-small
@@ -136,7 +133,6 @@ services:
       webhookie:
     depends_on:
       - webhookie-amqp
-      - registry-service
     deploy:
       resources:
         *services-small
@@ -160,7 +156,6 @@ services:
       webhookie:
     depends_on:
       - webhookie-amqp
-      - registry-service
     deploy:
       resources:
         *services-medium
@@ -182,8 +177,6 @@ services:
       - "8085:8085"
     networks:
       webhookie:
-    depends_on:
-      - registry-service
     deploy:
       resources:
         *services-small
@@ -207,7 +200,6 @@ services:
     depends_on:
       - webhookie-mongo
       - webhookie-amqp
-      - registry-service
     deploy:
       resources:
         *services-large
@@ -231,7 +223,6 @@ services:
       webhookie:
     depends_on:
       - webhookie-amqp
-      - registry-service
     deploy:
       resources:
         *services-medium
@@ -256,7 +247,6 @@ services:
     depends_on:
       - webhookie-mongo
       - webhookie-amqp
-      - registry-service
     deploy:
       resources:
         *services-large
@@ -281,7 +271,6 @@ services:
     depends_on:
       - webhookie-mongo
       - webhookie-amqp
-      - registry-service
     deploy:
       resources:
         *services-small

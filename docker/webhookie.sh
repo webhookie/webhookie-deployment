@@ -19,7 +19,6 @@ declare sizes=(
 declare modules=(
   "mongo"
   "rabbit"
-  "registry"
   "services"
   "gateway"
   "portal"
@@ -68,7 +67,7 @@ init() {
     --with-monitoring)
       modules+=("monitoring")
       ;;
-    --with-sample)
+    --with-demo)
       modules+=("sample")
       ;;
     --no-mongo)
@@ -79,9 +78,6 @@ init() {
       ;;
     --no-portal)
       modules=("${modules[@]/"portal"}")
-      ;;
-    --no-registry)
-      modules=("${modules[@]/"registry"}")
       ;;
       #    *)
       #      printf "***************************\n"
@@ -160,9 +156,9 @@ show_help() {
   echo "--up: brings services up"
   echo "--arm: uses arm keycloak image for M1 Macs"
   echo "--auth0: removes keycloak from the stack and sets auth0 as auth provider; consider having auth0.env file in the same folder as keycloak.env"
-  echo "--no-logging: removes ELK containers from the deployment"
-  echo "--no-monitoring: removes Monitoring(Prometheus and Grafana) containers from the deployment"
-  echo "--no-sample: removes Sample subscription application container from the deployment"
+  echo "--with-logging: adds ELK containers from the deployment"
+  echo "--with-monitoring: adds Monitoring(Prometheus and Grafana) containers from the deployment"
+  echo "--with-demo: adds Sample subscription application container from the deployment"
   echo "--no-mongo: removes MongoDB container from the deployment; consider updating env variables"
   echo "--no-rabbit: removes RabbitMQ container from the deployment; consider updating env variables"
   echo "--no-portal: removed webhookie-portal from the deployment"
