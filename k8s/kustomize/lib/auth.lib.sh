@@ -6,6 +6,7 @@ initIAM() {
 }
 
 updateForIAM() {
+  LOG_INFO "Copying ${color_green}$authFile${color_reset} to data/auth.env"
   cp "$authFile" data/auth.env
 }
 

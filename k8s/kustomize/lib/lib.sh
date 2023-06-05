@@ -153,8 +153,8 @@ verify() {
   declare NS="$1"
   declare pod="$2"
   declare status
-  declare timeout=3
   declare service="$3"
+  declare timeout=${4:-5}
   # bashsupport disable=BP3001
   declare spin='-\/'
   declare i=0
@@ -170,7 +170,7 @@ verify() {
     #    echo -ne "\b${spin:$i:1}"
     LOG_WAIT "Waiting for '$pod' pod in '$NS' namespace"
     if [[ "$status" != "Running" ]]; then
-      sleep $timeout
+      sleep "$timeout"
     fi
   done
   installed "$pod is successfully $status in namespace: $NS"

@@ -1,14 +1,14 @@
 #!/bin/bash
 
 setupWebhookie() {
-  verify "webhookie-mongodb" "webhookie-mongodb-0" "MongoDB"
-  verify "webhookie-rabbitmq" "webhookie-rabbitmq-server-0" "RabbitMQ"
+  verify "webhookie-mongodb" "webhookie-mongodb-0" "MongoDB" 20
+  verify "webhookie-rabbitmq" "webhookie-rabbitmq-server-0" "RabbitMQ" 10
   declare NS="webhookie-services"
   cd services || exit
   updateForIAM
   ./run.sh "$NS"
-  verify "$NS" "api-gateway" "Webhookie Services"
-  verify "$NS" "portal" "Webhookie"
+  verify "$NS" "api-gateway" "Webhookie Services" 20
+  verify "$NS" "portal" "Webhookie" 5
   cd ..
 }
 

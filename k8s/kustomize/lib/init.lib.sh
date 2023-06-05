@@ -1,6 +1,10 @@
 #!/bin/bash
 
 kube_context=$(kubectl config current-context)
+if [[ "$kube_context" == "" ]]; then
+  LOG_ERROR "Please configure your k8s context with minikube or EKS"
+  exit 1
+fi
 if [[ $kube_context == "minikube" ]]; then
   # shellcheck disable=SC1091
   . ./lib/minikube.lib.sh
@@ -19,7 +23,7 @@ while [ $# -gt 0 ]; do
   --auth=*)
     isKeycloak=false
     authFile="${1#*=}"
-    if [ ! -f "$authFile" ]; then
+    if [ ! -f "services/$authFile" ]; then
       LOG_ERROR "$authFile not found!"
       exit 1
     fi
