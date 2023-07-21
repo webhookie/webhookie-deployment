@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# shellcheck disable=SC2034
 isMinikube=true
 
 portForward() {
@@ -26,9 +27,12 @@ initCluster() {
   setKeycloakIngress ""
 
   if [[ $(arch) == 'arm64' ]]; then
+    # shellcheck disable=SC2034
     arch="arm"
     # shellcheck disable=SC2034
     isArm=true
+
+    LOG_INFO "Running on ${color_green}arm64${color_reset}..."
   fi
 
   deploying "Installing ingress addon"

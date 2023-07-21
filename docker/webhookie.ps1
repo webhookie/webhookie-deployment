@@ -71,7 +71,10 @@ if ($noRegistry -eq "true") {
 
 
 function run {
-  Remove-Item -Path ".env" -Force
+  $envFile = ".env"
+  if (Test-Path $envFile) {
+    Remove-Item $envFile -Force
+  }
 
   $ctnt = "./res/env.res.$size"
 

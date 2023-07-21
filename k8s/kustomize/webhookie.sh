@@ -66,12 +66,20 @@ run() {
 
 cleanup() {
   success "Cleaning up..."
-  rm -rf services/data/auth.env
-  rm -rf keycloak/base/realm.json
-  rm -rf keycloak/base/kustomization.yaml
+  if [ ! -f "services/data/auth.env" ]; then
+    rm -rf services/data/auth.env
+  fi
+  if [ ! -f "keycloak/base/realm.json" ]; then
+    rm -rf keycloak/base/realm.json
+  fi
+  if [ ! -f "keycloak/base/kustomization.yaml" ]; then
+    rm -rf keycloak/base/kustomization.yaml
+  fi
+
   installed "deployment workspace has been cleaned up successfully!"
 }
 
+cleanup
 setup
 run
 cleanup
