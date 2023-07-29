@@ -53,7 +53,7 @@ installOperator() {
 
 deployReplicaSet() {
   deploying "Deploy Elasticsearch replica set"
-  kustomize build . | kubectl apply -n "$NS" -f 1>/dev/null -
+  kubectl apply -k . -n "$NS" 1>/dev/null -
   installed "Elasticsearch replica set has been deployed successfully!"
 }
 

@@ -13,7 +13,7 @@ deploy() {
   deploying "Deploying RabbitMQ replica set"
   # shellcheck disable=SC3020
   kubectl create ns "$NS" &> /dev/null
-  kustomize build . | kubectl apply --namespace "$NS" -f 1>/dev/null -
+  kubectl apply -k . --namespace "$NS" 1>/dev/null
   installed "RabbitMQ replica set has been deployed successfully!"
 }
 

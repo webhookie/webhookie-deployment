@@ -13,7 +13,7 @@ deployCRD() {
   if [ -z "$instance" ]; then
     deploying "Installing MongoDB CRD"
 
-    kustomize build ./$operator/config/crd | kubectl apply -f &> /dev/null -
+    kubectl apply -k ./$operator/config/crd &> /dev/null
 
     deploying "\t️⚡️ Verifying Mongodb CRD..."
     kubectl get crd/mongodbcommunity.mongodbcommunity.mongodb.com &> /dev/null
@@ -31,19 +31,19 @@ deployRBAC() {
   deploying "Deploying Mongodb RBAC"
   # shellcheck disable=SC2069,SC3020
   kubectl create ns "$NS" &> /dev/null
-  kustomize build ./$operator/config/rbac | kubectl apply --namespace "$NS" -f 1>/dev/null -
+  kubectl apply -k ./$operator/config/rbac --namespace "$NS" 1>/dev/null
   installed "Mongodb RBAC has been deployed successfully!"
 }
 
 deployOperator() {
   deploying "Installing Mongodb Operator"
-  kustomize build ./$operator/config/manager | kubectl apply --namespace "$NS" -f 1>/dev/null -
+  kubectl apply -k ./$operator/config/manager --namespace "$NS" 1>/dev/null
   installed "Mongodb Operator has been installed successfully!"
 }
 
 deployReplicaSet() {
   deploying "Deploying Mongodb replica set"
-  kustomize build . | kubectl apply --namespace "$NS" -f 1>/dev/null -
+  kubectl apply -k . --namespace "$NS" 1>/dev/null
   installed "Mongodb replica set has been deployed successfully!"
 }
 

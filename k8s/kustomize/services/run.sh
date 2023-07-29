@@ -12,7 +12,7 @@ kubectl create ns "$NS" &> /dev/null
 
 run() {
   deploying "$1"
-  kustomize build . | kubectl "$command" --namespace "$NS" -f 1>/dev/null -
+  kubectl "$command" -k . --namespace "$NS" 1>/dev/null
   installed "webhookie has been deployed successfully!"
 }
 
