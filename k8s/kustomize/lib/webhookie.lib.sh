@@ -18,7 +18,7 @@ waitForGateway() {
   local i=0
 
   declare health_endpoint="$url/api/manage/health"
-  local message="Waiting for $url"
+  local message="Waiting for $health_endpoint"
   progress "$message"
   until curl --output /dev/null --silent --head --fail "$health_endpoint"; do
     i=$(( (i+1) %4 ))

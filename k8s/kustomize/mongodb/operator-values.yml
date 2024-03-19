@@ -1,0 +1,29 @@
+operator:
+  name: mongodb-kubernetes-operator
+  operatorImageName: mongodb-kubernetes-operator
+  deploymentName: mongodb-kubernetes-operator
+  version: 0.8.1
+  resources:
+    limits:
+      cpu: 200m
+      memory: 200Mi
+    requests:
+      cpu: 200m
+      memory: 200Mi
+agent:
+#  name: mongodb-agent
+#  version: 12.0.24.7719-1
+  name: mongodb-agent-ubi
+  version: 12.0.25.7724-1
+versionUpgradeHook:
+  name: mongodb-kubernetes-operator-version-upgrade-post-start-hook
+  version: 1.0.7
+readinessProbe:
+  name: mongodb-kubernetes-readiness
+  version: 1.0.15
+
+registry:
+#  agent: docker.io/mohsinonxrm #quay.io/mongodb
+  versionUpgradeHook: docker.io/mohsinonxrm #quay.io/mongodb
+  readinessProbe: docker.io/mohsinonxrm #quay.io/mongodb
+  operator: docker.io/mohsinonxrm #quay.io/mongodb

@@ -5,7 +5,8 @@ metadata:
 spec:
   members: 1
   type: ReplicaSet
-  version: "5.0.9"
+  version: "7.0.5"
+#  version: "7.0.5-ubuntu2204"
   security:
     authentication:
       modes: ["SCRAM"]

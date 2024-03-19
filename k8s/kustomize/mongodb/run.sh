@@ -47,12 +47,32 @@ deployReplicaSet() {
   installed "Mongodb replica set has been deployed successfully!"
 }
 
+# Function to run a command with error handling
+run_command() {
+  # shellcheck disable=SC2124
+  local command=$@
+  local output
+#  LOG_DEBUG "Running command: $command"
+  # Execute the command passed to the function
+  output=$($command)
+  local status=$?
+
+  # Check the exit status of the command
+  if [ $status -ne 0 ]; then
+    echo "Error: Command failed with status $status"
+    exit $status
+  fi
+
+  LOG_SUCCESS "$output"
+}
+
+
 deployOperatorUsingHelm() {
   deploying "Installing MongoDB Operator"
   kubectl create ns "$NS" &> /dev/null
   helm repo add mongodb https://mongodb.github.io/helm-charts &> /dev/null
   helm repo update &> /dev/null
-  helm install community-operator mongodb/community-operator --namespace "$NS" &> /dev/null
+  helm install community-operator mongodb/community-operator -f operator-values.yml --namespace "$NS" &> /dev/null
   installed "Mongodb Operator has been installed successfully!"
 }
 
